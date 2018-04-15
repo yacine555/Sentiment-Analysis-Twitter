@@ -2,8 +2,9 @@
 #
 #https://apps.twitter.com
 #Owner	ybouakkaz
-
+import csv
 import os
+import re
 import tweepy
 from textblob import TextBlob
 import numpy as np
@@ -44,21 +45,42 @@ if not tweets:
 
 search_polarities = SearchPolarities()
 
+            
+#Function of labelisation of analysis
+def get_tweet_label(analysis):
+    if analysis.sentiment.polarity > 0:
+        return 'positive'
+    elif analysis.sentiment.polarity == 0:
+        return 'neutral'
+    else:
+        return 'negative'
+    
+#Function to clean tweet
+def clean_tweet(tweet):
+    return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
 
-#Perform Sentiment Analysis on Tweets
-for tweet in tweets:
-	print(tweet.text)
-	analysis = TextBlob(tweet.text)
-	#search_polarities.append(analysis.sentiment.polarity)
+#create csv file to store tweets
+with open('csv/%s_tweets.csv' % analysisQuery, 'w') as csvFile:
+    csvWriter = csv.writer(csvFile, delimiter='\t', lineterminator='\n')
+    csvWriter.writerow(['tweet,tweet cleaned,sentiment_label'])
+    #Perform Sentiment Analysis on Tweets
+    for tweet in tweets:
+        print(tweet.text)
+        analysis = TextBlob(tweet.text)
+        #search_polarities.append(analysis.sentiment.polarity)
+        
+        
+        print(analysis.sentiment.polarity)
 
-	print(analysis.sentiment.polarity)
-
-	if (analysis.sentiment.polarity > 0.00):
-		search_polarities.positive +=1
-	elif (analysis.sentiment.polarity < 0.00):
-		search_polarities.negative +=1
-	else:
-		search_polarities.neutral +=1
+        if (analysis.sentiment.polarity > 0.00):
+            search_polarities.positive +=1
+        elif (analysis.sentiment.polarity < 0.00):
+            search_polarities.negative +=1
+        else:
+            search_polarities.neutral +=1
+            
+        tweet_cleaned = clean_tweet(tweet.text)
+        csvWriter.writerow([tweet.text,',',tweet_cleaned ,',', get_tweet_label(analysis)])
 
 
 search_polarities.positive = search_polarities.positive/len(tweets)*100

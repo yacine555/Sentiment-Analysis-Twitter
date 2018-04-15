@@ -1,9 +1,10 @@
 ##READ ME
 
 This is a basic Twitter Sentiment Analyzer in Python 3 using the libraries:
-[tweepy](http://www.tweepy.org/) to access the Twitter API
-[TextBlob](https://textblob.readthedocs.io/en/dev/) to perform Sentiment Analysis. 
-[matplotlib](https://matplotlib.org) to display the result on a Pie chart
+
+* [tweepy](http://www.tweepy.org/) to access the Twitter API
+* [TextBlob](https://textblob.readthedocs.io/en/dev/) to perform Sentiment Analysis. 
+* [matplotlib](https://matplotlib.org) to display the result on a Pie chart
 
 Using NLP the script is able able to see how positive or negative each tweet is about whatever topic we choose. 
 
